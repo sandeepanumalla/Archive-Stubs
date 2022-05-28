@@ -1,0 +1,67 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container center">
+    <div class="content-section">        
+    <fieldset class="form-group">
+        <legend class="border-bottom mb-4">Select Server & Directory</legend>    
+        <div class="panel panel-default">
+               <div class="panel-body">
+               <span id="success_message"></span>
+               <form method="post" id="stub_form">
+                   <div class="form-group">
+                        <label>Server</label>
+                       <select><option>LDCNASVF-UKLF3 </option>
+                       <option>LDCNASVF-UKLF10 </option>
+                       <option>LDCNASVF-UKGI8 </option>
+                        <option>LDCNASVF-UKLF6 </option>
+                        <option>LDCNASVF-UKLF12 </option></select>
+                   </div>
+                   
+                   <div class="form-group">
+                        <label>Select Folder</label>
+                         <input type="text" readonly name="folderPath" id="folderPath" class="form-control" />
+                         <span id="folderPath_error" class="text-danger"></span>
+                   </div>
+                   <div class="form-group col-md-2" align="left" style="padding:0px;">
+                        <input type="button" name="openDialog" id="openDialog" class="btn btn-danger" value="Select Folder Path" />
+                   </div>
+                   <div class="clearfix"></div>
+                   <div class="form-group">
+                       <label class="border-bottom "><h3>Option</h3></label><br />
+                       <strong>Separation </strong><input type="radio" name="optProc" checked id="optProc" class="form-control" selected value="Separate" />
+                             <strong>Deletion</strong> <input type="radio" name="optProc" id="optProc" class="form-control" value="Delete" />
+                   </div>
+                   
+                   <div class="clearfix"></div>
+                   <div class="form-group">
+                       
+                       <div class="col-md-5" style="padding: 0px">
+                        <strong>Do not include sub-folders down to the lowest directory depth </strong>
+                       </div>
+                       <div class="col-md-2 text-center" style="padding: 0px">
+                       <input type="checkbox" name="noSubFolders" id="noSubFolders" class="form-control" value="YES" /> 
+                       </div>
+                   </div>
+                   <div class="clearfix"></div><br>
+                   <div class="form-group col-md-7" align="right" style="padding: 0px;">
+                         <input type="submit" name="save" disabled id="save" class="btn btn-info" value="SUBMIT" />
+                   </div>
+                   
+                   <div class="form-group col-md-2" align="center">
+                       <span id="Confirm"></span>
+                   </div>
+               </form>
+                   <div class="clearfix"></div>
+               <div class="form-group" id="process" style="display:none;">
+                  <div class="progress">
+                   <div class="progress-bar progress-bar-striped active bg-success" role="progressbar" aria-valuemin="0" aria-valuemax="100" style=""></div>
+                  </div>
+               </div>
+                   
+              </div>
+        </div> 
+
+    </fieldset>
+    </div>
+</div>
+{% endblock content %}
