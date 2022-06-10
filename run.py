@@ -9,6 +9,8 @@ from auth import rest_api
 from flask_login import login_required
 import tkinter.ttk as ttk
 from tkinter.filedialog import askdirectory
+import win32api
+
 from forms import LoginForm
 from stubs import STALE
 # from STALE import getListOfFiles, getCount, getListOfFilesOneLevel
@@ -19,6 +21,16 @@ app = Flask(__name__, template_folder='templates', static_url_path='', static_fo
 cls = STALE()
 app.config['SECRET_KEY']='91a52a9fdbb83c1762f518c62c9b8924'
 
+driveIndexes = [];
+def showDrives():
+    drives = win32api.GetLogicalDriveStrings()
+    drives = drives.split('\000')[:-1]
+    for i in drives:
+        driveIndexes.append(i)
+
+    ##driveIndexes = drives
+    return drives
+
 def login_required(f):
     @wraps(f)
     def wrap(*args, **kwargs):
@@ -27,15 +39,15 @@ def login_required(f):
             return f(*args, **kwargs)
         else:
             print("session not found")
-            flash("You need to login first")
+            flash("You need to login first", "danger")
             return redirect(url_for('login'))
     return wrap
-
 
 @app.route('/')
 @login_required
 def index():
-    return render_template('home.html', msg='Archived Stubs')
+    drives = showDrives();
+    return render_template('home.html', msg='Archived Stubs', connected = drives)
 
 @app.route('/get')
 def get():
@@ -46,20 +58,6 @@ usercredentials = {
     "password":"testing"
 }
 print(usercredentials);
-
-# @app.route('/login', methods=["POST", "GET"])
-# def login():
-#     print("running!!!")
-#     if request.method == 'POST':
-#         data = request.json;
-#         if usercredentials['username'] == data['username'] and usercredentials['password'] == data['password']:
-#             print("running if")
-#             return redirect(url_for())
-#             # return Response(json.dumps({"success":"true"}), 200, {'ContentType':'application/json'})
-#         else:
-#             return "wrong username or password"
-#     else:
-#         return render_template('login.html');
 
 @app.route('/login',methods=["POST","GET"])
 def login():
@@ -140,17 +138,24 @@ def stubsconfirm():
         msg = f'{CountData}'
     return jsonify(msg)
 
-@app.route("/opendialog",methods=["POST","GET"])
-def opendialog():
+@app.route("/opendialog/<driveIndex>",methods=["POST","GET"])
+def opendialog(driveIndex):
     open_folder = 'Select Folder Path'
     
     if request.method == 'POST': 
         # name = request.form['name']
         # if (name == 'SelectFolder'):
+        # selectedDrive = document.getElementById("#option").textValue
+        content = request.get_json(silent=True)
+        #selected = content['selectedDrive']
+
+
+        selectedDrive = driveIndexes[(int)(driveIndex) - 1]
+        print("the selected drive is -> ", selectedDrive);
         root = Tk()
         root.withdraw()
         root.attributes('-topmost', True)
-        open_folder = filedialog.askdirectory(initialdir='C:/')
+        open_folder = filedialog.askdirectory(initialdir=selectedDrive)
         root.iconify()
         root.deiconify()
         root.destroy()
@@ -158,7 +163,7 @@ def opendialog():
     return jsonify(open_folder)
 
 def main():
-    app.run(debug=True, port=5000, host='127.0.0.1')
+    app.run(debug=True, port=5000, host='0.0.0.0')
 
 if __name__ == '__main__':
     main()

@@ -5,7 +5,7 @@ from datetime import datetime
 import logging
 import csv
 
-from PyQt5.QtWidgets import (QWidget, QPushButton, QLineEdit, QInputDialog, QApplication, QFileDialog)
+
 
 class STALE():
     def __init__(self):

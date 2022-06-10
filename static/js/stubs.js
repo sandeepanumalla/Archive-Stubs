@@ -1,9 +1,10 @@
 $(document).ready(function(){
+ let selected = "";
       $("#openDialog").click(function(){
         $.ajax({
-          url:"/opendialog",
+          url:`/opendialog/${selectedDrives}`,
           method:"POST",
-          data:{'name': 'SelectFolder'},
+          data:{'name': 'SelectFolder', 'selectedDrive':selectedDrives},
             beforeSend:function()
             {
               $('#openDialog').attr('disabled', 'disabled');
@@ -18,21 +19,18 @@ $(document).ready(function(){
           })
       });
 
+      $("#option").click(function(e){
+        alert("clicked");
+        selected = textValue;
+      })
+
+      const option = document.getElementById("option");
       $('#login_form').on('submit', function(event){
         event.preventDefault();
 
         console.log("event is ", $('#username').val());
         console.log("event is ", $('#password').val());
         console.log("event is ", $(this).serialize());
-
-//        $.ajax({
-//            url:"/login",
-//            method:"POST",
-//            data:$(this).serialize(),
-//            success: function(data){
-//            console.log("ye raha data", data);
-//            }
-//        })
 
             const content = {
                     "username":$('#username').val().toString(),
@@ -46,7 +44,6 @@ $(document).ready(function(){
                 body:JSON.stringify(content)
             })
             .then(function(response){
-
                if(response.status != 200){
                     return "Response status code was not 200"
                }

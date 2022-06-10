@@ -10,13 +10,13 @@
                <form method="post" id="stub_form">
                    <div class="form-group">
                         <label>Server</label>
-                       <select><option>LDCNASVF-UKLF3 </option>
-                       <option>LDCNASVF-UKLF10 </option>
-                       <option>LDCNASVF-UKGI8 </option>
-                        <option>LDCNASVF-UKLF6 </option>
-                        <option>LDCNASVF-UKLF12 </option></select>
+                       <select id="drives" onchange="val()" name="drives">
+                           <option value="empty" selected>Please select the drive:</option>
+                       {% for i in connected %}
+                        <option id="option" value={{i}} onclick="onclikk()">{{i}} </option>
+                       {%endfor %}
+                       </select>
                    </div>
-                   
                    <div class="form-group">
                         <label>Select Folder</label>
                          <input type="text" readonly name="folderPath" id="folderPath" class="form-control" />
@@ -64,4 +64,16 @@
     </fieldset>
     </div>
 </div>
+
+<script  type=text/javascript>
+    //var value = document.getElementById("drives").options[select.selectedIndex].value;
+    var selectedDrives;
+    function val() {
+    d = document.getElementById("drives").options.selectedIndex;
+    selectedDrives = d;
+    alert(d);
+}
+
+</script>
+
 {% endblock content %}
